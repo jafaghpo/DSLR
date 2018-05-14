@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+from __future__ import print_function
+
 __author__ = 'John Afaghpour'
 
 import sys
@@ -34,7 +36,7 @@ def organize_data(file):
 	table = []
 	category = []
 	for i, elem in enumerate(data):
-		if valid_data(elem[0]):
+		if valid_data(elem[0]) and i != 0:
 			for j, nb in enumerate(elem):
 				data[i][j] = float(nb) if nb else ''
 			table.append(data[i])
@@ -42,13 +44,26 @@ def organize_data(file):
 	return table, category
 
 
-def display_data(argument, features, data):
+def display_data(argument, features, stats):
 	
+	color = '\033[1;3{}m'
+	reset = '\033[0m'
 	print('\nFile: {}'.format(argument))
-	print('Features: {}'.format(features))
-	print('Stats:')
-	for elem in data:
-		print(elem)
+	features = [' '] + features
+	for i, elem in enumerate(features):
+		print('{}{:^18.16}{}|'.format(color.format(i % 7), elem, reset), end='')
+	print('')
+	for row in stats:
+		for i, elem in enumerate(row):
+			print('\033[1;3{}m'.format(i % 7), end='')
+			try:
+				float(elem)
+			except:
+				print('{:^18}'.format(elem), end='')
+			else:
+				print('{:^18.2f}'.format(elem), end='')
+			print('\033[0m|', end='')
+		print('')
 
 
 def get_stats(data, features):
