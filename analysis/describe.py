@@ -44,6 +44,21 @@ def organize_data(file):
 	return table, category
 
 
+def get_stats(data, features):
+
+	stats = [['Count'], ['Mean'], ['Std'], ['Min'], ['25%'], ['50%'], ['75%'], ['Max']]
+	for feature in data:
+		stats[0].append(get_count(feature))
+		stats[1].append(get_mean(feature))
+		stats[2].append(get_std(feature))
+		stats[3].append(get_min(feature))
+		stats[4].append(get_percentile(feature, 0.25))
+		stats[5].append(get_percentile(feature, 0.50))
+		stats[6].append(get_percentile(feature, 0.75))
+		stats[7].append(get_max(feature))
+	return stats
+
+
 def display_data(argument, features, stats):
 	
 	color = '\033[1;3{}m'
@@ -66,20 +81,6 @@ def display_data(argument, features, stats):
 		print('')
 
 
-def get_stats(data, features):
-
-	stats = [['Count'], ['Mean'], ['Std'], ['Min'], ['25%'], ['50%'], ['75%'], ['Max']]
-	for feature in data:
-		stats[0].append(get_count(feature))
-		stats[1].append(get_mean(feature))
-		stats[2].append(get_std(feature))
-		stats[3].append(get_min(feature))
-		stats[4].append(get_percentile(feature, 0.25))
-		stats[5].append(get_percentile(feature, 0.50))
-		stats[6].append(get_percentile(feature, 0.75))
-		stats[7].append(get_max(feature))
-	return stats
-
 def main():
 
 	if len(sys.argv) < 2:
@@ -93,7 +94,11 @@ def main():
 		 	print('error: failed to open {}'.format(argument))
 		 	sys.exit()
 		file = csv.reader(fd, delimiter=',')
-		data, features = organize_data(file)
+		try:
+			data, features = organize_data(file)
+		except:
+			print('error: invalid data')
+			sys.exit()
 		stats = get_stats(data, features)
 		display_data(argument, features, stats)
 		fd.close()
