@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-from __future__ import print_function
-
 __author__ = 'John Afaghpour'
 
 import sys
@@ -10,6 +8,13 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 
+
+def check_empty(row):
+
+	for elem in row:
+		if not elem:
+			return True
+	return False
 
 def organize_data(file):
 
@@ -25,10 +30,11 @@ def organize_data(file):
 			continue
 		house = row[1]
 		row = row[6:]
+		if check_empty(row):
+			continue
 		for i, elem in enumerate(row):
-			if elem:
-				elem = int(float(elem))
-				data[i][houses_idx[house]].append(elem)
+			elem = float(elem)
+			data[i][houses_idx[house]].append(elem)
 	return data, features
 
 
@@ -39,18 +45,19 @@ def display(data, features):
 	houses_name = ['Gryffindor', 'Slytherin', 'Ravenclaw', 'Hufflepuff']
 	c = {'Gryffindor':'crimson', 'Slytherin':'green', 'Ravenclaw':'teal', 'Hufflepuff':'purple'}
 	plt.subplot(5, 3, 1)
-	plt.text(0.3, 0.1, 'Gryffindor', fontdict={'color':c['Gryffindor'],'size':12})
-	plt.text(0.3, 0.3, 'Ravenclaw', fontdict={'color':c['Ravenclaw'],'size':12})
-	plt.text(0.3, 0.5, 'Hufflepuff', fontdict={'color':c['Hufflepuff'],'size':12})
-	plt.text(0.3, 0.7, 'Slytherin', fontdict={'color':c['Slytherin'],'size':12})
+	plt.text(0.2, 0.2, 'Gryffindor', fontdict={'color':c['Gryffindor'],'size':12})
+	plt.text(0.2, 0.6, 'Ravenclaw', fontdict={'color':c['Ravenclaw'],'size':12})
+	plt.text(0.6, 0.2, 'Hufflepuff', fontdict={'color':c['Hufflepuff'],'size':12})
+	plt.text(0.6, 0.6, 'Slytherin', fontdict={'color':c['Slytherin'],'size':12})
+	plt.xticks([], [])
+	plt.yticks([], [])
 	plt.title('Houses')
-	
 	for i, feature in enumerate(features):
 		plt.subplot(5, 3, i + 2)
 		plt.title(feature)
 		plt.grid(True)
 		for idx, house in enumerate(data[i]):
-			plt.hist(house, 50, normed=1, facecolor=c[houses_name[idx]], alpha=0.5)
+			plt.hist(house, 20, facecolor=c[houses_name[idx]], alpha=0.5)
 	plt.subplots_adjust(top=0.9, bottom=0.1, left=0.1, right=0.9, hspace=0.5, wspace=0.3)
 	plt.show()
 

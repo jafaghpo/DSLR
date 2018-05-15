@@ -36,6 +36,7 @@ def organize_data(file):
 	table = []
 	category = []
 	for i, elem in enumerate(data):
+
 		if valid_data(elem[0]) and i != 0:
 			for j, nb in enumerate(elem):
 				data[i][j] = float(nb) if nb else ''
