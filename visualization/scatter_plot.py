@@ -11,6 +11,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+def get_marks(data):
+
+	value, number = [], []
+	for mark in data:
+		value.append(mark)
+		count = 0
+		for elem in data:
+			if elem == mark:
+				count += 1
+		data = [val for val in data if val != mark]
+		number.append(count)
+	return value, number
+
+
 def organize_data(file):
 
 	houses_idx = {'Gryffindor':0, 'Slytherin':1, 'Ravenclaw':2, 'Hufflepuff':3}
@@ -35,7 +49,7 @@ def organize_data(file):
 def display(data, features):
 
 	fig = plt.figure(figsize=(25, 15), facecolor='beige')
-	fig.canvas.set_window_title('[Histogram] Quel cours de Poudlard a une repartition des notes homogenes entre les quatres maisons ?')
+	fig.canvas.set_window_title('[Scatter Plot] Quelles sont les deux features qui sont semblables ?')
 	houses_name = ['Gryffindor', 'Slytherin', 'Ravenclaw', 'Hufflepuff']
 	c = {'Gryffindor':'crimson', 'Slytherin':'green', 'Ravenclaw':'teal', 'Hufflepuff':'purple'}
 	plt.subplot(5, 3, 1)
@@ -44,13 +58,14 @@ def display(data, features):
 	plt.text(0.3, 0.5, 'Hufflepuff', fontdict={'color':c['Hufflepuff'],'size':12})
 	plt.text(0.3, 0.7, 'Slytherin', fontdict={'color':c['Slytherin'],'size':12})
 	plt.title('Houses')
-	
+
 	for i, feature in enumerate(features):
 		plt.subplot(5, 3, i + 2)
 		plt.title(feature)
 		plt.grid(True)
 		for idx, house in enumerate(data[i]):
-			plt.hist(house, 50, normed=1, facecolor=c[houses_name[idx]], alpha=0.5)
+			x, y = get_marks(house)
+			plt.scatter(y, x, color=c[houses_name[idx]], alpha=0.5)
 	plt.subplots_adjust(top=0.9, bottom=0.1, left=0.1, right=0.9, hspace=0.5, wspace=0.3)
 	plt.show()
 
