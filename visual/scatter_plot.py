@@ -18,8 +18,8 @@ def check_empty(row):
 
 def organize_data(file):
 
-	first = False
 	data = {'Astronomy':[], 'Defense Against the Dark Arts': []}
+	first = False
 	for row in file:
 		if first == False:
 			features = row
@@ -39,9 +39,9 @@ def display(data):
 	fig = plt.figure(figsize=(25, 15), facecolor='beige')
 	fig.canvas.set_window_title('[Scatter Plot] Quelles sont les deux features qui sont semblables ?')
 	plt.grid(True)
-	plt.ylabel('Astronomy', color='blue')
-	plt.xlabel('Defense Against the Dark Arts', color='red')
-	plt.scatter(data['Astronomy'], data['Defense Against the Dark Arts'], color=['blue', 'red'], alpha=0.5)
+	plt.ylabel('Astronomy', color='purple')
+	plt.xlabel('Defense Against the Dark Arts', color='teal')
+	plt.scatter(data['Astronomy'], data['Defense Against the Dark Arts'], color=['purple', 'teal'], alpha=0.5)
 	plt.show()
 
 

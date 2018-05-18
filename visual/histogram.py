@@ -5,7 +5,6 @@ __author__ = 'John Afaghpour'
 
 import sys
 import csv
-import numpy as np
 import matplotlib.pyplot as plt
 
 
@@ -15,6 +14,7 @@ def check_empty(row):
 		if not elem:
 			return True
 	return False
+
 
 def organize_data(file):
 
@@ -42,13 +42,13 @@ def display(data, features):
 
 	fig = plt.figure(figsize=(25, 15), facecolor='beige')
 	fig.canvas.set_window_title('[Histogram] Quel cours de Poudlard a une repartition des notes homogenes entre les quatres maisons ?')
-	houses_name = ['Gryffindor', 'Slytherin', 'Ravenclaw', 'Hufflepuff']
-	c = {'Gryffindor':'crimson', 'Slytherin':'green', 'Ravenclaw':'teal', 'Hufflepuff':'purple'}
+	houses = ['Gryffindor', 'Slytherin', 'Ravenclaw', 'Hufflepuff']
+	color = {'Gryffindor':'crimson', 'Slytherin':'green', 'Ravenclaw':'teal', 'Hufflepuff':'purple'}
 	plt.subplot(5, 3, 1)
-	plt.text(0.2, 0.2, 'Gryffindor', fontdict={'color':c['Gryffindor'],'size':12})
-	plt.text(0.2, 0.6, 'Ravenclaw', fontdict={'color':c['Ravenclaw'],'size':12})
-	plt.text(0.6, 0.2, 'Hufflepuff', fontdict={'color':c['Hufflepuff'],'size':12})
-	plt.text(0.6, 0.6, 'Slytherin', fontdict={'color':c['Slytherin'],'size':12})
+	plt.text(0.2, 0.2, 'Gryffindor', fontdict={'color':color['Gryffindor'],'size':12})
+	plt.text(0.2, 0.6, 'Ravenclaw', fontdict={'color':color['Ravenclaw'],'size':12})
+	plt.text(0.6, 0.2, 'Hufflepuff', fontdict={'color':color['Hufflepuff'],'size':12})
+	plt.text(0.6, 0.6, 'Slytherin', fontdict={'color':color['Slytherin'],'size':12})
 	plt.xticks([], [])
 	plt.yticks([], [])
 	plt.title('Houses')
@@ -57,7 +57,7 @@ def display(data, features):
 		plt.title(feature)
 		plt.grid(True)
 		for idx, house in enumerate(data[i]):
-			plt.hist(house, 20, facecolor=c[houses_name[idx]], alpha=0.5)
+			plt.hist(house, 20, facecolor=color[houses[idx]], alpha=0.5)
 	plt.subplots_adjust(top=0.9, bottom=0.1, left=0.1, right=0.9, hspace=0.5, wspace=0.3)
 	plt.show()
 
