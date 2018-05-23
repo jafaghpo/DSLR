@@ -3,76 +3,66 @@
 
 __author__ = 'John Afaghpour'
 
-import sys
 import csv
-import numpy as np
-import pandas as pd
+import sys
+import copy
+from tools import *
 
 
-def get_mean(data):
+def write_theta(theta):
 
-	total, count = 0, 0
-	for elem in data:
-		total += elem if elem else 0
-		count += 1
-	return total / count
-
-
-def get_max(data):
-
-	maximum = data[0]
-	for elem in data:
-		if elem and elem > maximum:
-			maximum = elem
-	return maximum
+	path = get_path(__file__, '../theta.csv')
+	fd = open(path, 'w')
+	for elem in theta:
+		for i, value in enumerate(elem):
+			if i != 0:
+				fd.write(',')
+			fd.write(str(value))
+		fd.write('\n')
+	fd.close()
 
 
-def fill_data(data, mean):
+def gradient_descent(x, y, m, iteration=100, houses=4):
 
-	size = len(data)
-	for i in range(size):
-		pass
-
-def organize_data(file):
-
-	first = False
-	houses = {'Gryffindor':0, 'Slytherin':1, 'Ravenclaw':2, 'Hufflepuff':3}
-	data = [[] for x in range(4)]
-	for i, row in enumerate(file):
-		if i == 0:
-			continue
-		data[0].append(houses[row[1]])
-		data[1].append(float(row[7])) if row[7] else data[1].append(row[7])
-		data[2].append(float(row[8])) if row[8] else data[1].append(row[8])
-		data[3].append(float(row[12])) if row[12] else data[1].append(row[12])
-	maximum = []
-	mean = []
-	for i, feature in enumerate(data):
-		if i == 0:
-			continue
-		maximum.append(get_max(feature))
-		mean.append(get_mean(feature))
-	for i in range(4):
-		if i == 0:
-			continue
-		fill_data(data[i], mean[i - 1])
-	return data
+	theta = [[0. for a in range(N)] for b in range(houses)]
+	last = copy.deepcopy(theta)
+	lr = 0.7
+	sums = [0.] * N
+	for _ in range(iteration):
+		last = list(sums)
+		for house in range(houses):
+			for i in range(m):
+				yi = 1 if y[i] == house else 0
+				for j in range(N):
+					sums[j] += (h(theta[house], x[i]) - yi) * x[i][j]
+			for idx in range(N):
+				theta[house][idx] -= (lr / float(m)) * sums[idx]
+	return theta
 
 
 def main():
 
-	path = 'dataset/dataset_train.csv'
+	path = get_path(__file__, '../dataset/dataset_train.csv')
 	try:
 		fd = open(path, 'r')
 	except:
-	 	print('error: failed to open {}'.format(path))
-	 	sys.exit()
+	 	exit('error: failed to open {}'.format(path))
 	file = csv.reader(fd, delimiter=',')
 	try:
-		data = organize_data(file)
+		x, y, m = organize_data(file)
 	except:
-		print('error: invalid data')
-		sys.exit()
+		exit('error: invalid data')
+	i = None
+	try:
+		i = int(sys.argv[1])
+	except:
+		print('You can pass the number of iteration in argument')
+	if i == None:
+		theta = gradient_descent(x, y, m)
+	else:
+		theta = gradient_descent(x, y, m, i)
+	write_theta(theta)
+	fd.close()
 
 if __name__ == '__main__':
 	main()
