@@ -16,11 +16,11 @@ def get_dataset():
 	 	exit('error: failed to open {}'.format(path))
 	file = csv.reader(fd, delimiter=',')
 	#try:
-	x, _, size = organize_data(file)
-	# except:
-	# 	exit('error: invalid data')
+	x, _, m, _ = get_data(file, ['Astronomy', 'Care of Magical Creatures', 'Arithmancy', 'Potions', 'Ancient Runes'])
+	#except:
+	#	exit('error: invalid data')
 	fd.close()
-	return x, size
+	return x, m
 
 
 def get_theta():
@@ -49,21 +49,21 @@ def predict(theta, x):
 	return houses[i]
 
 
-def write_predictions(theta, x, size):
+def get_predictions(theta, x, m):
 
 	path = get_path(__file__, '../houses.csv')
 	fd = open(path, 'w')
 	fd.write('Index,Hogwarts House\n')
-	for i in range(size):
+	for i in range(m):
 		fd.write(str(i) + ',' + predict(theta, x[i]) + '\n')
 	fd.close()
 
 
 def main():
 
-	x, size = get_dataset()
+	x, m = get_dataset()
 	theta = get_theta()
-	write_predictions(theta, x, size)
+	get_predictions(theta, x, m)
 
 if __name__ == '__main__':
 	main()

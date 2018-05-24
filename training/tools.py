@@ -3,12 +3,8 @@
 
 __author__ = 'John Afaghpour'
 
-import math
 import numpy as np
 import os
-
-
-N = 3
 
 
 def get_path(file, rel_path):
@@ -21,8 +17,9 @@ def get_mean(data, i):
 
 	total, count = 0, 0
 	for elem in data:
-		total += elem[i] if elem[i] else 0
-		count += 1
+		if elem[i]:
+			total += elem[i]
+			count += 1
 	return total / count
 
 
@@ -35,48 +32,44 @@ def get_max(data, i):
 	return maximum
 
 
-def fill_data(data, mean, maximum):
+def fill_data(data, n, mean, maximum):
 
-	for i in range(N):
+	for i in range(n):
 		if not data[i]:
 			data[i] = mean[i]
-		data[i] /= maximum[i]
+		if maximum[i] != 0:
+			data[i] /= maximum[i]
 	return data
 
 
-def organize_data(file):
+def get_data(file, ignored=[]):
 
-	first = False
+	ignored_default = ['Index', 'First Name', 'Last Name', 'Birthday', 'Best Hand']
 	houses = {'Gryffindor':0, 'Slytherin':1, 'Ravenclaw':2, 'Hufflepuff':3}
-	data = []
-	house = list()
-	count = 0
-	for i, row in enumerate(file):
+	x, y, m = [], [], 0
+	for i, line in enumerate(file):
 		if i == 0:
+			feature = line
 			continue
-		data.append([])
-		if row[1]:
-			house.append(houses[row[1]])
-		row[7] = float(row[7]) if row[7] else row[7]
-		row[8] = float(row[8]) if row[8] else row[8]
-		row[12] = float(row[12]) if row[12] else row[12]
-		data[i - 1].append(row[7])
-		data[i - 1].append(row[8])
-		data[i - 1].append(row[12])
-		count += 1
-	maximum = []
-	mean = []
-	for i in range(N):
-		maximum.append(get_max(data, i))
-		mean.append(get_mean(data, i))
-	for i in range(count):
-		data[i] = fill_data(data[i], mean, maximum)
-	return data, house, count
+		x.append([])
+		x[i - 1].append(1)
+		for j, elem in enumerate(line):
+			if feature[j] == 'Hogwarts House':
+				if line[j]:
+					y.append(houses[line[j]])
+			elif feature[j] not in ignored and feature[j] not in ignored_default:
+				x[i - 1].append(float(elem) if elem else elem)
+		m += 1
+	maximum, mean, n = [], [], len(x[0])
+	for i in range(n):
+		maximum.append(get_max(x, i))
+		mean.append(get_mean(x, i))
+	for i in range(m):
+		x[i] = fill_data(x[i], n, mean, maximum)
+	return x, y, m, n
 
 
 def h(theta, x):
 
-	z = 0
-	for i in range(N):
-		z += (theta[i] * x[i])
-	return 1 / (1 + math.exp(-z))
+	z = sum([theta[i] * x[i] for i in range(len(x))])
+	return 1.0 / (1.0 + np.e ** -z)

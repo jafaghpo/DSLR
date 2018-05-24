@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+
 __author__ = 'John Afaghpour'
 
 import csv
@@ -22,21 +23,18 @@ def write_theta(theta):
 	fd.close()
 
 
-def gradient_descent(x, y, m, iteration=100, houses=4):
+def gradient_descent(x, y, m, n, iteration=25):
 
-	theta = [[0. for a in range(N)] for b in range(houses)]
-	last = copy.deepcopy(theta)
-	lr = 0.7
-	sums = [0.] * N
+	theta = [[0.0 for a in range(n)] for b in range(4)]
+	lr = 0.3
+	sums = [0.] * n
 	for _ in range(iteration):
-		last = list(sums)
-		for house in range(houses):
+		for house in range(4):
 			for i in range(m):
-				yi = 1 if y[i] == house else 0
-				for j in range(N):
-					sums[j] += (h(theta[house], x[i]) - yi) * x[i][j]
-			for idx in range(N):
-				theta[house][idx] -= (lr / float(m)) * sums[idx]
+				for j in range(n):
+					sums[j] += (h(theta[house], x[i]) - (y[i] == house)) * x[i][j]
+			for k in range(n):
+				theta[house][k] -= (lr / float(m)) * sums[k]
 	return theta
 
 
@@ -49,18 +47,10 @@ def main():
 	 	exit('error: failed to open {}'.format(path))
 	file = csv.reader(fd, delimiter=',')
 	try:
-		x, y, m = organize_data(file)
+		x, y, m, n = get_data(file, ['Astronomy', 'Care of Magical Creatures', 'Arithmancy', 'Potions', 'Ancient Runes'])
 	except:
 		exit('error: invalid data')
-	i = None
-	try:
-		i = int(sys.argv[1])
-	except:
-		print('You can pass the number of iteration in argument')
-	if i == None:
-		theta = gradient_descent(x, y, m)
-	else:
-		theta = gradient_descent(x, y, m, i)
+	theta = gradient_descent(x, y, m, n)
 	write_theta(theta)
 	fd.close()
 
