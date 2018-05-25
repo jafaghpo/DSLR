@@ -25,7 +25,7 @@ def get_dataset():
 
 def get_theta():
 
-	path = get_path(__file__, '../theta.csv')
+	path = get_path(__file__, 'theta.csv')
 	try:
 		fd = open(path, 'r')
 	except:

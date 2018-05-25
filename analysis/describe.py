@@ -7,7 +7,14 @@ __author__ = 'John Afaghpour'
 
 import sys
 import csv
+import os
 from get_stats import *
+
+
+def get_path(rel_path):
+
+	pwd = os.getcwd()
+	return os.path.join(pwd, rel_path)
 
 
 def valid_data(elem):
@@ -90,7 +97,7 @@ def main():
 	del sys.argv[0]
 	for argument in sys.argv:
 		try:
-			fd = open(argument, 'r')
+			fd = open(get_path(argument), 'r')
 		except:
 		 	print('error: failed to open {}'.format(argument))
 		 	sys.exit()

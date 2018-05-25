@@ -10,7 +10,7 @@ from tools import *
 
 def write_theta(theta):
 
-	path = get_path(__file__, '../theta.csv')
+	path = get_path(__file__, 'theta.csv')
 	fd = open(path, 'w')
 	for elem in theta:
 		for i, value in enumerate(elem):
