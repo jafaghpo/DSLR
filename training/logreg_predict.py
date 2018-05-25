@@ -15,10 +15,10 @@ def get_dataset():
 	except:
 	 	exit('error: failed to open {}'.format(path))
 	file = csv.reader(fd, delimiter=',')
-	#try:
-	x, _, m, _ = get_data(file, ['Astronomy', 'Care of Magical Creatures', 'Arithmancy', 'Potions', 'Ancient Runes'])
-	#except:
-	#	exit('error: invalid data')
+	try:
+		x, _, m, _ = get_data(file, [f for f in all_features if f in ignored_features])
+	except:
+		exit('error: invalid data')
 	fd.close()
 	return x, m
 

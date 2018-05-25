@@ -7,6 +7,10 @@ import numpy as np
 import os
 
 
+all_features = ['Arithmancy', 'Astronomy', 'Herbology', 'Defense Against the Dark Arts', 'Divination', 'Muggle Studies', 'Ancient Runes', 'History of Magic', 'Transfiguration', 'Potions', 'Care of Magical Creatures', 'Charms', 'Flying']
+# selected_features = ['Herbology', 'Defense Against the Dark Arts', 'Divination', 'History of Magic', 'Potions', 'Charms', 'Flying']
+ignored_features = ['Arithmancy', 'Astronomy', 'Ancient Runes', 'Transfiguration', 'Potions', 'Care of Magical Creatures']
+
 def get_path(file, rel_path):
 
 	script_dir = os.path.dirname(file)

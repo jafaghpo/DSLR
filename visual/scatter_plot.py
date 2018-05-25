@@ -5,6 +5,7 @@ __author__ = 'John Afaghpour'
 
 import sys
 import csv
+import warnings
 import matplotlib.pyplot as plt
 
 
@@ -47,6 +48,7 @@ def display(data):
 
 def main():
 
+	warnings.simplefilter(action='ignore', category=FutureWarning)
 	if len(sys.argv) != 2:
 		print('usage: {} file.csv'.format(__file__))
 		sys.exit()

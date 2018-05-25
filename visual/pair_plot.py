@@ -5,6 +5,7 @@ __author__ = 'John Afaghpour'
 
 import sys
 import csv
+import warnings
 import matplotlib.pyplot as plt
 
 
@@ -43,9 +44,9 @@ def display(data, features):
 	i = 1
 	Y = 0
 	fig = plt.figure(figsize=(25, 15), facecolor='beige')
-	fig.canvas.set_window_title('[Pair Plot] Quelles caracteristiques choisir pour la regression logistique?')
+	fig.canvas.set_window_title('[Pair Plot] Quelles caracteristiques choisir pour la regression logistique ?')
 	houses = ['Gryffindor', 'Slytherin', 'Ravenclaw', 'Hufflepuff']
-	color = {'Gryffindor':'crimson', 'Slytherin':'green', 'Ravenclaw':'teal', 'Hufflepuff':'purple'}
+	color = {'Gryffindor':'crimson', 'Slytherin':'green', 'Ravenclaw':'teal', 'Hufflepuff':'goldenrod'}
 	for featureY in features:
 		X = 0
 		for featureX in features:
@@ -71,6 +72,7 @@ def display(data, features):
 
 def main():
 
+	warnings.simplefilter(action='ignore', category=FutureWarning)
 	if len(sys.argv) != 2:
 		print('usage: {} file.csv'.format(__file__))
 		sys.exit()

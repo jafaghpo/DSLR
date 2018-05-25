@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-
 __author__ = 'John Afaghpour'
 
 import csv
 import sys
-import copy
 from tools import *
 
 
@@ -23,10 +21,10 @@ def write_theta(theta):
 	fd.close()
 
 
-def gradient_descent(x, y, m, n, iteration=7):
+def gradient_descent(x, y, m, n, iteration=3):
 
 	theta = [[0.0 for a in range(n)] for b in range(4)]
-	lr = 0.7
+	lr = 3.0
 	for _ in range(iteration):
 		for house in range(4):
 			sums = [0.] * n
@@ -47,7 +45,7 @@ def main():
 	 	exit('error: failed to open {}'.format(path))
 	file = csv.reader(fd, delimiter=',')
 	try:
-		x, y, m, n = get_data(file, ['Astronomy', 'Care of Magical Creatures', 'Arithmancy', 'Potions', 'Ancient Runes'])
+		x, y, m, n = get_data(file, [f for f in all_features if f in ignored_features])
 	except:
 		exit('error: invalid data')
 	theta = gradient_descent(x, y, m, n)
