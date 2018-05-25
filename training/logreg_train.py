@@ -23,18 +23,18 @@ def write_theta(theta):
 	fd.close()
 
 
-def gradient_descent(x, y, m, n, iteration=25):
+def gradient_descent(x, y, m, n, iteration=7):
 
 	theta = [[0.0 for a in range(n)] for b in range(4)]
-	lr = 0.3
-	sums = [0.] * n
+	lr = 0.7
 	for _ in range(iteration):
 		for house in range(4):
+			sums = [0.] * n
 			for i in range(m):
 				for j in range(n):
 					sums[j] += (h(theta[house], x[i]) - (y[i] == house)) * x[i][j]
 			for k in range(n):
-				theta[house][k] -= (lr / float(m)) * sums[k]
+				theta[house][k] -= (lr / m) * sums[k]
 	return theta
 
 
